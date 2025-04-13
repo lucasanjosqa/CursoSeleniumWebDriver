@@ -29,4 +29,27 @@ public class TesteTreinamento {
         Assert.assertEquals("Texto TextArea", driver.findElement(By.id("elementosForm:sugestoes")).getAttribute("value"));
         driver.close();
     }
+
+    @Test
+    public void deveInteragirComRadioButton() {
+        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+
+        driver.findElement(By.id("elementosForm:sexo:0")).click();
+        Assert.assertTrue(driver.findElement(By.id("elementosForm:sexo:0")).isSelected());
+        driver.close();
+    }
+
+    @Test
+    public void deveInteragirComCheckbox() {
+        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+
+        driver.findElement(By.id("elementosForm:comidaFavorita:0")).click();
+        Assert.assertTrue(driver.findElement(By.id("elementosForm:comidaFavorita:0")).isSelected());
+        driver.close();
+    }
+
 }
