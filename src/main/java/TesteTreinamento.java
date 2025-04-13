@@ -2,7 +2,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
 
 
 public class TesteTreinamento {
@@ -51,5 +55,40 @@ public class TesteTreinamento {
         Assert.assertTrue(driver.findElement(By.id("elementosForm:comidaFavorita:0")).isSelected());
         driver.close();
     }
+
+    @Test
+    public void deveInteragirComCombo() {
+        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+        WebElement element = driver.findElement(By.id("elementosForm:escolaridade"));
+        Select combo = new Select(element);
+
+        combo.selectByVisibleText("Superior");
+        Assert.assertEquals("Superior", combo.getFirstSelectedOption().getText());
+        driver.close();
+    }
+
+    @Test
+    public void deveVerificarValoresCombo(){
+        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+        WebElement element = driver.findElement(By.id("elementosForm:escolaridade"));
+        Select combo = new Select(element);
+
+        List<WebElement> options = combo.getOptions();
+        Assert.assertEquals(8, options.size());
+
+        boolean encontrou = false;
+        for(WebElement option : options){
+            if(option.getText().equals("Superior")){
+                encontrou = true;
+                break;
+            }
+        }
+        Assert.assertTrue(encontrou);
+    }
+
 
 }
