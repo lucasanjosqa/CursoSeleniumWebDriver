@@ -1,4 +1,5 @@
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -93,9 +94,9 @@ public class TesteTreinamento {
         System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
         WebDriver driver = new FirefoxDriver();
         driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+
         WebElement element = driver.findElement(By.id("elementosForm:esportes"));
         Select combo = new Select(element);
-
         combo.selectByVisibleText("Natacao");
         combo.selectByVisibleText("Corrida");
         combo.selectByVisibleText("O que eh esporte?");
@@ -110,9 +111,20 @@ public class TesteTreinamento {
         System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
         WebDriver driver = new FirefoxDriver();
         driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+
         WebElement botao = driver.findElement(By.id("buttonSimple"));
         botao.click();
         Assert.assertEquals("Obrigado!", botao.getAttribute("value"));
         driver.close();
+    }
+
+    @Test
+    @Ignore
+    public void deveInteragirComLinks(){
+        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+
+        driver.findElement(By.linkText("Voltar")).click();
     }
 }
