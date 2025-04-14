@@ -12,7 +12,7 @@ import java.util.List;
 public class TesteTreinamento {
 
     @Test
-    public void testeTextField(){
+    public void testeTextField() {
         System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
         WebDriver driver = new FirefoxDriver();
         driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
@@ -70,7 +70,7 @@ public class TesteTreinamento {
     }
 
     @Test
-    public void deveVerificarValoresCombo(){
+    public void deveVerificarValoresCombo() {
         System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
         WebDriver driver = new FirefoxDriver();
         driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
@@ -81,8 +81,8 @@ public class TesteTreinamento {
         Assert.assertEquals(8, options.size());
 
         boolean encontrou = false;
-        for(WebElement option : options){
-            if(option.getText().equals("Superior")){
+        for (WebElement option : options) {
+            if (option.getText().equals("Superior")) {
                 encontrou = true;
                 break;
             }
@@ -90,5 +90,20 @@ public class TesteTreinamento {
         Assert.assertTrue(encontrou);
     }
 
+    @Test
+    public void deveVerificarValoresComboMultiplo() {
+        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+        WebElement element = driver.findElement(By.id("elementosForm:esportes"));
+        Select combo = new Select(element);
 
+        combo.selectByVisibleText("Natacao");
+        combo.selectByVisibleText("Corrida");
+        combo.selectByVisibleText("O que eh esporte?");
+
+        List<WebElement> allSelectedOptions = combo.getAllSelectedOptions();
+        Assert.assertEquals(3, allSelectedOptions.size());
+        driver.close();
+    }
 }
