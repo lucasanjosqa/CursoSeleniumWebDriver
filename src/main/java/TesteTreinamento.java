@@ -5,12 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
-
 import java.util.List;
 
 
 public class TesteTreinamento {
-
     @Test
     public void testeTextField() {
         System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
@@ -104,6 +102,17 @@ public class TesteTreinamento {
 
         List<WebElement> allSelectedOptions = combo.getAllSelectedOptions();
         Assert.assertEquals(3, allSelectedOptions.size());
+        driver.close();
+    }
+
+    @Test
+    public void deveInteragirComBotoes() {
+        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+        WebElement botao = driver.findElement(By.id("buttonSimple"));
+        botao.click();
+        Assert.assertEquals("Obrigado!", botao.getAttribute("value"));
         driver.close();
     }
 }
