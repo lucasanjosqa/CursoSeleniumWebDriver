@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class TesteAlert {
-
     @Test
     public void deveInteragirComAlertSimples() {
         System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
@@ -41,6 +40,23 @@ public class TesteAlert {
         Assert.assertEquals("Negado", textCancel);
         alerta.accept();
         driver.close();
+    }
+
+    @Test
+    public void deveInteragirComPrompt() {
+        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+
+        driver.findElement(By.id("prompt")).click();
+        Alert alerta = driver.switchTo().alert();
+        Assert.assertEquals("Digite um numero", alerta.getText());
+        alerta.sendKeys("12");
+        alerta.accept();
+        Assert.assertEquals("Era 12?", alerta.getText());
+        alerta.accept();
+        Assert.assertEquals(":D", alerta.getText());
+        alerta.accept();
     }
 }
 
