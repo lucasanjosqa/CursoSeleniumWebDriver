@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -34,6 +35,14 @@ public class TesteExercicioCadastro {
         WebElement botaoCadastrar = driver.findElement(By.id("elementosForm:cadastrar"));
         botaoCadastrar.click();
 
+        Assert.assertTrue(driver.findElement(By.id("resultado")).getText().startsWith("Cadastrado!"));
+        Assert.assertTrue(driver.findElement(By.id("descNome")).getText().endsWith("Lucas"));
+        Assert.assertEquals("Sobrenome: Anjos", driver.findElement(By.id("descSobrenome")).getText());
+        Assert.assertEquals("Sexo: Masculino", driver.findElement(By.id("descSexo")).getText());
+        Assert.assertEquals("Comida: Pizza", driver.findElement(By.id("descComida")).getText());
+        Assert.assertEquals("Escolaridade: superior", driver.findElement(By.id("descEscolaridade")).getText());
+        Assert.assertEquals("Esportes: Corrida", driver.findElement(By.id("descEsportes")).getText());
 
+        driver.close();
     }
 }
