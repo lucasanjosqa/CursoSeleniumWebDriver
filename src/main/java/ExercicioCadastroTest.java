@@ -1,4 +1,6 @@
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -6,14 +8,22 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class TesteExercicioCadastro {
+public class ExercicioCadastroTest {
+    private WebDriver driver;
+
+    @Before
+    public void inicializa(){
+        driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+    }
+
+    @After
+    public void finaliza() {
+        driver.quit();
+    }
 
     @Test
     public void ExercicioCadastroCompleto(){
-        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
-        WebDriver driver = new FirefoxDriver();
-        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-
         WebElement nome = driver.findElement(By.id("elementosForm:nome"));
         nome.sendKeys("Lucas");
 
@@ -42,7 +52,5 @@ public class TesteExercicioCadastro {
         Assert.assertEquals("Comida: Pizza", driver.findElement(By.id("descComida")).getText());
         Assert.assertEquals("Escolaridade: superior", driver.findElement(By.id("descEscolaridade")).getText());
         Assert.assertEquals("Esportes: Corrida", driver.findElement(By.id("descEsportes")).getText());
-
-        driver.close();
     }
 }

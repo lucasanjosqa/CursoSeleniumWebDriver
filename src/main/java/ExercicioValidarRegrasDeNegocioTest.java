@@ -1,4 +1,6 @@
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -7,7 +9,19 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class ExercicioValidarRegrasDeNegocio {
+public class ExercicioValidarRegrasDeNegocioTest {
+    private WebDriver driver;
+
+    @Before
+    public void inicializa(){
+        driver = new FirefoxDriver();
+        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+    }
+
+    @After
+    public void finaliza() {
+        driver.quit();
+    }
 
     @Test
     public void ExercicioValidarRegrasDeNegocio(){
