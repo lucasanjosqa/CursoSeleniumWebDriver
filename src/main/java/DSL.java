@@ -4,6 +4,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.List;
+
 public class DSL {
     private WebDriver driver;
 
@@ -45,6 +47,13 @@ public class DSL {
         return combo.getFirstSelectedOption().getText();
     }
 
+    public List<WebElement> obterOpcoesSelecionadas(String id) {
+        WebElement element = driver.findElement(By.id(id));
+        Select combo = new Select(element);
+        return combo.getAllSelectedOptions();
+    }
+
+
     public void clicarBotao(String id){
         driver.findElement(By.id(id)).click();
     }
@@ -60,5 +69,6 @@ public class DSL {
     public String obterTexto(String id){
         return obterTexto(By.id(id));
     }
+
 
 }
