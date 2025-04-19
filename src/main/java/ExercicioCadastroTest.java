@@ -10,11 +10,13 @@ import org.openqa.selenium.support.ui.Select;
 
 public class ExercicioCadastroTest {
     private WebDriver driver;
+    private DSL dsl;
 
     @Before
     public void inicializa(){
         driver = new FirefoxDriver();
         driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+        dsl = new DSL(driver);
     }
 
     @After
@@ -24,33 +26,20 @@ public class ExercicioCadastroTest {
 
     @Test
     public void ExercicioCadastroCompleto(){
-        WebElement nome = driver.findElement(By.id("elementosForm:nome"));
-        nome.sendKeys("Lucas");
+        dsl.escreve("elementosForm:nome", "Lucas");
+        dsl.escreve("elementosForm:sobrenome", "Anjos");
+        dsl.clicarRadio("elementosForm:sexo:0");
+        dsl.clicarCheckbox("elementosForm:comidaFavorita:2");
+        dsl.selecionarCombo("elementosForm:esportes", "Corrida");
+        dsl.selecionarCombo("elementosForm:escolaridade", "Superior");
+        dsl.clicarBotao("elementosForm:cadastrar");
 
-        WebElement sobrenome = driver.findElement(By.id("elementosForm:sobrenome"));
-        sobrenome.sendKeys("Anjos");
-
-        WebElement sexo = driver.findElement(By.id("elementosForm:sexo:0"));
-        sexo.click();
-
-        WebElement comidaFavorita = driver.findElement(By.id("elementosForm:comidaFavorita:2"));
-        comidaFavorita.click();
-
-        new Select(driver.findElement(By.id("elementosForm:esportes"))).selectByVisibleText("Corrida");
-
-        WebElement escolaridade = driver.findElement(By.id("elementosForm:escolaridade"));
-        Select combo = new Select(escolaridade);
-        combo.selectByVisibleText("Superior");
-
-        WebElement botaoCadastrar = driver.findElement(By.id("elementosForm:cadastrar"));
-        botaoCadastrar.click();
-
-        Assert.assertTrue(driver.findElement(By.id("resultado")).getText().startsWith("Cadastrado!"));
-        Assert.assertTrue(driver.findElement(By.id("descNome")).getText().endsWith("Lucas"));
-        Assert.assertEquals("Sobrenome: Anjos", driver.findElement(By.id("descSobrenome")).getText());
-        Assert.assertEquals("Sexo: Masculino", driver.findElement(By.id("descSexo")).getText());
-        Assert.assertEquals("Comida: Pizza", driver.findElement(By.id("descComida")).getText());
-        Assert.assertEquals("Escolaridade: superior", driver.findElement(By.id("descEscolaridade")).getText());
-        Assert.assertEquals("Esportes: Corrida", driver.findElement(By.id("descEsportes")).getText());
+        Assert.assertTrue(dsl.obterTexto("resultado").startsWith("Cadastrado!"));
+        Assert.assertTrue(dsl.obterTexto(By.id("descNome")).endsWith("Lucas"));
+        Assert.assertEquals("Sobrenome: Anjos", dsl.obterTexto(By.id("descSobrenome")));
+        Assert.assertEquals("Sexo: Masculino", dsl.obterTexto(By.id("descSexo")));
+        Assert.assertEquals("Comida: Pizza", dsl.obterTexto(By.id("descComida")));
+        Assert.assertEquals("Escolaridade: superior", dsl.obterTexto(By.id("descEscolaridade")));
+        Assert.assertEquals("Esportes: Corrida", dsl.obterTexto(By.id("descEsportes")));
     }
 }
