@@ -11,11 +11,13 @@ import org.openqa.selenium.support.ui.Select;
 
 public class ExercicioValidarRegrasDeNegocioTest {
     private WebDriver driver;
+    private DSL dsl;
 
     @Before
-    public void inicializa(){
+    public void inicializa() {
         driver = new FirefoxDriver();
         driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+        dsl = new DSL(driver);
     }
 
     @After
@@ -24,55 +26,38 @@ public class ExercicioValidarRegrasDeNegocioTest {
     }
 
     @Test
-    public void ExercicioValidarRegrasDeNegocio(){
-        System.setProperty("webdriver.gecko.driver", "C:\\Drivers\\geckodriver.exe");
-        WebDriver driver = new FirefoxDriver();
-        driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-
+    public void exercicioValidarRegrasDeNegocio() {
         driver.findElement(By.id("elementosForm:cadastrar")).click();
+        Assert.assertEquals("Nome eh obrigatorio", dsl.obterTextoAlerta());
 
-        //  Nome é obrigatório
-        Alert alertNome = driver.switchTo().alert();
-        String alertTextNome = alertNome.getText();
-        Assert.assertEquals("Nome eh obrigatorio", alertTextNome);
-        alertNome.accept();
-        driver.findElement(By.id("elementosForm:nome")).sendKeys("Lucas");
+        dsl.escreve("elementosForm:nome", "Lucas");
 
-        //  Sobrenome é obrigatório
+        // Sobrenome
         driver.findElement(By.id("elementosForm:cadastrar")).click();
-        Alert alertSobrenome = driver.switchTo().alert();
-        String alertTextSobrenome = alertSobrenome.getText();
-        Assert.assertEquals("Sobrenome eh obrigatorio", alertTextSobrenome);
-        alertSobrenome.accept();
-        driver.findElement(By.id("elementosForm:sobrenome")).sendKeys("Anjos");
+        Assert.assertEquals("Sobrenome eh obrigatorio", dsl.obterTextoAlerta());
 
-        //  Sexo é obrigatório
-        driver.findElement(By.id("elementosForm:sexo:0")).click();
-        Assert.assertTrue(driver.findElement(By.id("elementosForm:sexo:0")).isSelected());
+        dsl.escreve("elementosForm:sobrenome", "Anjos");
 
-        //  Não posso dizer que sou vegetariano e como carne
-        driver.findElement(By.id("elementosForm:comidaFavorita:0")).click();
-        driver.findElement(By.id("elementosForm:comidaFavorita:3")).click();
-        driver.findElement(By.id("elementosForm:cadastrar")).click();
-        Alert alertComida = driver.switchTo().alert();
-        String alertTextComida = alertComida.getText();
-        Assert.assertEquals("Tem certeza que voce eh vegetariano?", alertTextComida);
-        alertComida.accept();
-        driver.findElement(By.id("elementosForm:comidaFavorita:3")).click();
+        // Sexo
+        dsl.clicarRadio("elementosForm:sexo:0");
+        Assert.assertTrue(dsl.isRadioMarcado("elementosForm:sexo:0"));
+
+        // Não posso dizer que sou vegetariano e como carne
+        dsl.clicarCheckbox("elementosForm:comidaFavorita:0");
+        dsl.clicarCheckbox("elementosForm:comidaFavorita:3");
+        dsl.clicarBotao("elementosForm:cadastrar");
+        Assert.assertEquals("Tem certeza que voce eh vegetariano?", dsl.obterTextoAlerta());
+        dsl.clicarCheckbox("elementosForm:comidaFavorita:3");
 
         //  Não posso marcar algum esporte e depois dizer o que eh algum esporte?
         WebElement element = driver.findElement(By.id("elementosForm:esportes"));
         Select combo = new Select(element);
         combo.selectByVisibleText("Corrida");
         combo.selectByVisibleText("O que eh esporte?");
-        driver.findElement(By.id("elementosForm:cadastrar")).click();
-        Alert alertEsporte = driver.switchTo().alert();
-        String alertTextEsporte = alertEsporte.getText();
+        dsl.clicarBotao("elementosForm:cadastrar");
+        String alertTextEsporte = dsl.obterTextoAlerta();
         Assert.assertEquals("Voce faz esporte ou nao?", alertTextEsporte);
-        alertEsporte.accept();
         combo.deselectByVisibleText("O que eh esporte?");
         driver.findElement(By.id("elementosForm:cadastrar")).click();
-
-        driver.close();
     }
 }
