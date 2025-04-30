@@ -2,19 +2,20 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 
 public class ExercicioCadastroTest {
     private WebDriver driver;
+    private CampoTreinamentoPage page;
+    private DSL dsl;
 
     @Before
     public void inicializa(){
         driver = new FirefoxDriver();
         driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+        dsl = new DSL(driver);
+        page = new CampoTreinamentoPage(driver);
     }
 
     @After
@@ -24,33 +25,65 @@ public class ExercicioCadastroTest {
 
     @Test
     public void ExercicioCadastroCompleto(){
-        WebElement nome = driver.findElement(By.id("elementosForm:nome"));
-        nome.sendKeys("Lucas");
+        page.setNome("Lucas");
+        page.setSobrenome("Anjos");
+        page.setSexoMasculino();
+        page.setComidaFavoritaPizza();
+        page.setEscolaridade("Superior");
+        page.setEsporte("Corrida");
+        page.cadastrar();
 
-        WebElement sobrenome = driver.findElement(By.id("elementosForm:sobrenome"));
-        sobrenome.sendKeys("Anjos");
-
-        WebElement sexo = driver.findElement(By.id("elementosForm:sexo:0"));
-        sexo.click();
-
-        WebElement comidaFavorita = driver.findElement(By.id("elementosForm:comidaFavorita:2"));
-        comidaFavorita.click();
-
-        new Select(driver.findElement(By.id("elementosForm:esportes"))).selectByVisibleText("Corrida");
-
-        WebElement escolaridade = driver.findElement(By.id("elementosForm:escolaridade"));
-        Select combo = new Select(escolaridade);
-        combo.selectByVisibleText("Superior");
-
-        WebElement botaoCadastrar = driver.findElement(By.id("elementosForm:cadastrar"));
-        botaoCadastrar.click();
-
-        Assert.assertTrue(driver.findElement(By.id("resultado")).getText().startsWith("Cadastrado!"));
-        Assert.assertTrue(driver.findElement(By.id("descNome")).getText().endsWith("Lucas"));
-        Assert.assertEquals("Sobrenome: Anjos", driver.findElement(By.id("descSobrenome")).getText());
-        Assert.assertEquals("Sexo: Masculino", driver.findElement(By.id("descSexo")).getText());
-        Assert.assertEquals("Comida: Pizza", driver.findElement(By.id("descComida")).getText());
-        Assert.assertEquals("Escolaridade: superior", driver.findElement(By.id("descEscolaridade")).getText());
-        Assert.assertEquals("Esportes: Corrida", driver.findElement(By.id("descEsportes")).getText());
+        Assert.assertTrue(page.obterResultadoCadastro().startsWith("Cadastrado!"));
+        Assert.assertTrue(page.obterNomeCadastro().endsWith("Lucas"));
+        Assert.assertEquals("Sobrenome: Anjos", page.obterSobrenomeCadastro());
+        Assert.assertEquals("Sexo: Masculino", page.obterSexoCadastro());
+        Assert.assertEquals("Comida: Pizza", page.obterComidaFavoritaCadastro());
+        Assert.assertEquals("Escolaridade: superior", page.obterEscolaridade());
+        Assert.assertEquals("Esportes: Corrida", page.obterEsporte());
     }
+
+    @Test
+    public void deveValidarNomeObrigatorio(){
+        page.cadastrar();
+        Assert.assertEquals("Nome eh obrigatorio", dsl.alertaObterTextoAlertaEAceita());
+    }
+
+    @Test
+    public void deveValidarSobrenomeObrigatorio(){
+        page.setNome("Lucas");
+        page.cadastrar();
+        Assert.assertEquals("Sobrenome eh obrigatorio", dsl.alertaObterTextoAlertaEAceita());
+    }
+
+    @Test
+    public void deveValidarSexoObrigatorio(){
+        page.setNome("Lucas");
+        page.setSobrenome("Anjos");
+        page.cadastrar();
+        Assert.assertEquals("Sexo eh obrigatorio", dsl.alertaObterTextoAlertaEAceita());
+    }
+
+    @Test
+    public void deveValidarComidaVegetariana(){
+        page.setNome("Lucas");
+        page.setSobrenome("Anjos");
+        page.setSexoMasculino();
+        page.setComidaCarne();
+        page.setComidaVegetariano();
+        page.cadastrar();
+        Assert.assertEquals("Tem certeza que voce eh vegetariano?", dsl.alertaObterTextoAlertaEAceita());
+    }
+
+    @Test
+    public void deveValidarEsportistaIndeciso(){
+        page.setNome("Lucas");
+        page.setSobrenome("Anjos");
+        page.setSexoMasculino();
+        page.setEsporte("Corrida");
+        page.setEsporte("O que eh esporte?");
+        page.cadastrar();
+        Assert.assertEquals("Voce faz esporte ou nao?", dsl.alertaObterTextoAlertaEAceita());
+    }
+
+
 }
