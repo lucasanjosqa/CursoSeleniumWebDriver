@@ -2,7 +2,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,13 +27,13 @@ public class ExercicioValidarRegrasDeNegocioTest {
     @Test
     public void exercicioValidarRegrasDeNegocio() {
         driver.findElement(By.id("elementosForm:cadastrar")).click();
-        Assert.assertEquals("Nome eh obrigatorio", dsl.obterTextoAlerta());
+        Assert.assertEquals("Nome eh obrigatorio", dsl.alertaObterTextoAlertaEAceita());
 
         dsl.escreve("elementosForm:nome", "Lucas");
 
         // Sobrenome
         driver.findElement(By.id("elementosForm:cadastrar")).click();
-        Assert.assertEquals("Sobrenome eh obrigatorio", dsl.obterTextoAlerta());
+        Assert.assertEquals("Sobrenome eh obrigatorio", dsl.alertaObterTextoAlertaEAceita());
 
         dsl.escreve("elementosForm:sobrenome", "Anjos");
 
@@ -46,7 +45,7 @@ public class ExercicioValidarRegrasDeNegocioTest {
         dsl.clicarCheckbox("elementosForm:comidaFavorita:0");
         dsl.clicarCheckbox("elementosForm:comidaFavorita:3");
         dsl.clicarBotao("elementosForm:cadastrar");
-        Assert.assertEquals("Tem certeza que voce eh vegetariano?", dsl.obterTextoAlerta());
+        Assert.assertEquals("Tem certeza que voce eh vegetariano?", dsl.alertaObterTextoAlertaEAceita());
         dsl.clicarCheckbox("elementosForm:comidaFavorita:3");
 
         //  Não posso marcar algum esporte e depois dizer o que eh algum esporte?
@@ -55,7 +54,7 @@ public class ExercicioValidarRegrasDeNegocioTest {
         combo.selectByVisibleText("Corrida");
         combo.selectByVisibleText("O que eh esporte?");
         dsl.clicarBotao("elementosForm:cadastrar");
-        String alertTextEsporte = dsl.obterTextoAlerta();
+        String alertTextEsporte = dsl.alertaObterTextoAlertaEAceita();
         Assert.assertEquals("Voce faz esporte ou nao?", alertTextEsporte);
         combo.deselectByVisibleText("O que eh esporte?");
         driver.findElement(By.id("elementosForm:cadastrar")).click();

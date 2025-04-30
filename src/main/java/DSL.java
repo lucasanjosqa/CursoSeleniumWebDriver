@@ -1,15 +1,13 @@
-import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 public class DSL {
-    private WebDriver driver;
+    private final WebDriver driver;
 
     public DSL(WebDriver driver){
         super();
@@ -43,19 +41,7 @@ public class DSL {
         combo.selectByVisibleText(valor);
     }
 
-    public void selecionarCheckboxPorTexto(String id, String texto) {
-        WebElement element = driver.findElement(By.id(id));
-        Select combo = new Select(element);
-        combo.selectByVisibleText(texto);
-    }
-
-    public void desmarcarCheckboxPorTexto(String id, String texto) {
-        WebElement element = driver.findElement(By.id(id));
-        Select combo = new Select(element);
-        combo.deselectByVisibleText(texto);
-    }
-
-    public String obterTextoAlerta() {
+    public String alertaObterTextoAlertaEAceita() {
         Alert alert = driver.switchTo().alert();
         String texto = alert.getText();
         alert.accept();
@@ -67,7 +53,6 @@ public class DSL {
         Select combo = new Select(element);
         return combo.getAllSelectedOptions();
     }
-
 
     public void clicarBotao(String id){
         driver.findElement(By.id(id)).click();
@@ -84,6 +69,5 @@ public class DSL {
     public String obterTexto(String id){
         return obterTexto(By.id(id));
     }
-
 
 }

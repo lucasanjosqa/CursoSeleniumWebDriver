@@ -18,6 +18,7 @@ public class CampoDeTreinamentoTest {
         driver = new FirefoxDriver();
         driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
         dsl = new DSL(driver);
+        CampoTreinamentoPage page = new CampoTreinamentoPage(driver);
     }
 
     @After
